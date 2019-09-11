@@ -61,26 +61,36 @@ function question() {
     counter = 30;
     timer = setInterval(countDown, 1000);
 
-    const isQuestionDone = (quizQuestions.length-1) === currentQuestion;
-    if (isQuestionDone){
-        alert("You Lose!!!");
-        displayResult();
-    } else {
-        currentQuestion++;
-        loadQuestion();
-    }
+    const question = triviaQuestions[question].question;
+    const choices = triviaQuestions[question].choices;
+
+    $('#time').html(counter);
+    $('#game').html(`<h3>${question}</h3> ${loadChoices(choices)} ${loadRemainingQuestion()}`);
 }
 
-// start timer
+function loadChoices(choices) {
+    let result = "";
+    for (i=0; i < choices.length; i++) {
+        result += '<p class="choice" data-answer="${choices[i]}">${choices[i]}</p>';
+    }
+    return result;
+}
 
-function timesUp(){
+
+// start timer
+function timesUp() {
     clearInterval(timer);
     losses++;
 
     setTimeout(question, 3000);
 }
 
-function countDown(){
+function countDown() {
     counter--;
-    $('#time').html(counter)
+    $('#time').html(counter);
+    if (counter === 0) {
+        timesUp();
+    }
 }
+
+
