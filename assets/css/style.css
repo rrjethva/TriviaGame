@@ -4,3 +4,48 @@
     border-radius: 4px;
     cursor: pointer;
 }
+
+body {
+    background: url("../images/james.jpg");
+    background-size: cover;
+}
+
+.jumbotron {
+    background: none;
+    align-items: center;
+    text-align: center;
+}
+
+.h1 {
+    color: white;
+    align-self: center;
+}
+
+h1 {
+    font-size: 5rem;
+    color: white;
+    align-items: center;
+}
+
+#time {
+    color: white;
+    background: rgb(68, 59, 59);
+}
+
+#game {
+    color: white;
+    background: rgb(68, 59, 59);
+}
+
+#preload-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+}
