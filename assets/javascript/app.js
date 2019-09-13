@@ -1,234 +1,261 @@
-$(document).ready(function () {
+$(document).ready(function() {
+  var questions = [
+    {
+      question: "Who is the shortest player of all-time",
+      answers: ["Yao Ming", "Manute Bol", "Nate Robinson", "Muggsy Bogues"],
+      values: ["false", "false", "false", "true"],
+      image: "assets/images/muggsy.gif"
+    },
 
-    let counter = 30;
-    let currentQuestion = 0;
-    let score = 0;
-    let lost = 0;
-    let timer;
+    {
+      question: "Who is the lowest seeded team to win the NBA title?",
+      answers: [
+        "92-93 Bulls",
+        "94-95 Houston Rockets",
+        "10-11 Dallas Mavericks",
+        "18-19 Golden State Warriors"
+      ],
+      values: ["false", "true", "false", "false"],
+      image: "assets/images/rockets.gif"
+    },
 
-    var quizQuestions = [
-        {
-            question: "Who is the shortest player of all-time",
-            choices: ["Yao Ming", "Manute Bol", "Nate Robinson", "Muggsy Bogues"],
-            correctAnswer: "Muggsy Bogues",
-            image: ("assets/images/muggsy.gif"),
-        },
+    {
+      question: "What player has the most career points?",
+      answers: [
+        "Kareem Abdul-Jabbar",
+        "Magic Johnson",
+        "Michael Jordan",
+        "Lebron James"
+      ],
+      values: ["true", "false", "false", "false"],
+      image: "assets/images/kareem.gif"
+    },
 
-        {
-            question: "Who is the lowest seeded team to win the NBA title?",
-            choices: ["92-93 Bulls", "94-95 Houston Rockets", "10-11 Dallas Mavericks", "18-19 Golden State Warriors"],
-            correctAnswer: "94-95 Houston Rockets",
-            image: ("assets/images/rockets.gif"),
-        },
+    {
+      question: "What is team has the best regular season record?",
+      answers: [
+        "Golden State Warriors",
+        "Chicago Bulls",
+        "Boston Celtics",
+        "LA Lakers"
+      ],
+      values: ["true", "false", "false", "false"],
+      image: "assets/images/gsw.gif"
+    },
+    {
+      question: "Which player has the highest career 3-pt FG percentage?",
+      answers: ["Stephen Curry", "J.J. Reddick", "Steve Kerr", "Ray Allen"],
+      values: ["false", "false", "true", "false"],
+      image: "assets/images/kerr.gif"
+    },
+    {
+      question: "Which player has the most NBA Finals MVP awards?",
+      answers: ["Lebron James", "Kobe Bryant", "Tim Duncan", "Michael Jordan"],
+      values: ["false", "false", "false", "true"],
+      image: "assets/images/mj.gif"
+    },
+    {
+      question: "What player has the highest career FT percentage?",
+      answers: ["James Harden", "Steve Nash", "John Stockton", "Stephen Curry"],
+      values: ["false", "true", "false", "false"],
+      image: "assets/images/nash.gif"
+    },
+    {
+      question:
+        "What player holds the record for most consecutive double-doubles?",
+      answers: [
+        "Russell Westbrook",
+        "Kevin Love",
+        "Kobe Bryant",
+        "Michael Jordan"
+      ],
+      values: ["false", "true", "false", "false"],
+      image: "assets/images/kevinlove.gif"
+    },
+    {
+      question:
+        "Which coach has the most consecutive seasons with a .500 winning percentage?",
+      answers: ["Pat Riley", "Rudy T", "Phil Jackson", "Don Nelson"],
+      values: ["false", "false", "true", "false"],
+      image: "assets/images/phil.gif"
+    }
+  ];
 
-        {
-            question: "What player has the most career points?",
-            choices: ["Kareem Abdul-Jabbar", "Magic Johnson", "Michael Jordan", "Lebron James"],
-            correctAnswer: "Kareem Abdul-Jabbar",
-            image: ("assets/images/kareem.gif"),
-        },
+  var currentQuestion = 0;
+  var correct = 0;
+  var wrong = 0;
+  var none = 0;
 
-        {
-            question: "What is team has the best regular season record?",
-            choices: ["Golden State Warriors", "Chicago Bulls", "Boston Celtics", "LA Lakers"],
-            correctAnswer: "Golden State Warriors",
-            image: ("assets/images/gsw.gif"),
-        },
-        {
-            question: "Which player has the highest career 3-pt FG percentage?",
-            choices: ["Stephen Curry", "J.J. Reddick", "Steve Kerr", "Ray Allen"],
-            correctAnswer: "Steve Kerr",
-            image: ("assets/images/kerr.gif"),
-        },
-        {
-            question: "Which player has the most NBA Finals MVP awards?",
-            choices: ["Lebron James", "Kobe Bryant", "Tim Duncan", "Michael Jordan"],
-            correctAnswer: "Michael Jordan",
-            image: ("assets/images/mj.gif"),
-        },
-        {
-            question: "What player has the highest career FT percentage?",
-            choices: ["James Harden", "Steve Nash", "John Stockton", "Stephen Curry"],
-            correctAnswer: "Steve Nash",
-            image: ("assets/images/nash.gif"),
-        },
-        {
-            question: "What player holds the record for most consecutive double-doubles?",
-            choices: ["Russell Westbrook", "Kevin Love", "Kobe Bryant", "Michael Jordan"],
-            correctAnswer: "Kevin Love",
-            image: ("assets/images/kevinlove.gif"),
-        },
-        {
-            question: "Which coach has the most consecutive seasons with a .500 winning percentage?",
-            choices: ["Pat Riley", "Rudy T", "Phil Jackson", "Don Nelson"],
-            correctAnswer: "Phil Jackson",
-            image: ("assets/images/phil.gif"),
-        },
-    ];
+  $("#start").on("click", function() {
+    $("#start").fadeToggle("slow", displayQ);
+  });
 
-    // var winImages = [
-    //     './assets/images/muggsy.gif',
-    //     './assets/images/rockets.gif',
-    //     './assets/images/kareem.gif',
-    //     './assets/images/gsw.gif',
-    //     './assets/images/kerr.gif',
-    //     './assets/images/mj.gif',
-    //     './assets/images/nash.gif',
-    //     './assets/images/kevinlove.gif',
-    //     './assets/images/phil.gif',
-    // ];
+  function displayQ() {
+    $(".message-content").remove();
+    $("#start").remove();
 
-    var lossImages = [
-        './assets/images/lose1.gif',
-        './assets/images/lose2.gif',
-        './assets/images/lose3.gif',
-        './assets/images/lose4.gif',
-        './assets/images/lose5.gif',
-    ];
+    var questionArea = $("<div>");
+    questionArea.attr("id", "question-area");
+    var timer = $("<h2>");
+    var question = $("<h2>");
 
-    
-    function nextQuestion() {
-        const isQuestionOver = (quizQuestions.length - 1) === currentQuestion;
-        if (isQuestionOver) {
-            // TODO
-            console.log('Game is over!!!!!');
-            displayResult();
-        } else {
-            currentQuestion++;
-            loadQuestion();
-        }
+    questionArea.appendTo("#content");
+    timer.appendTo(questionArea);
+    question.appendTo(questionArea);
 
+    var time = 30;
+    timer.html("<h2>" + time + " seconds remaining</h2>");
+
+    var countDown = setInterval(function() {
+      time--;
+      timer.html("<h2>" + time + " seconds remaining</h2>");
+
+      if (time === 0) {
+        clearInterval(countDown);
+        questionArea.fadeToggle("slow", timedOut);
+        none++;
+      }
+    }, 1000);
+
+    question.html(questions[currentQuestion].question);
+
+    for (var i = 0; i < questions[currentQuestion].answers.length; i++) {
+      var answers = $("<button>");
+      answers.html(questions[currentQuestion].answers[i]);
+      answers.addClass("answer-buttons");
+      answers.attr("value", questions[currentQuestion].values[i]);
+      answers.attr("id", "a" + i);
+      answers.appendTo(questionArea);
     }
 
-    
-    function timeUp() {
-        clearInterval(timer);
+    $("#a0").animate({ left: "+=600px" });
 
-        lost++;
+    $(".answer-buttons").on("click", function() {
+      if ($(this).attr("value") === "true") {
+        questionArea.fadeToggle("slow", displayCorrect);
+        clearInterval(countDown);
+        correct++;
+      }
 
-        preloadImage('lost');
-        setTimeout(nextQuestion, 3 * 1000);
-    }
-
-    function countDown() {
-        counter--;
-
-        $('#time').html('Timer: ' + counter);
-
-        if (counter === 0) {
-            timeUp();
-        }
-    }
-
-   
-    function loadQuestion() {
-        counter = 30;
-        timer = setInterval(countDown, 1000);
-
-        const question = quizQuestions[currentQuestion].question; // 
-        const choices = quizQuestions[currentQuestion].choices; // 
-
-        $('#time').html('Timer: ' + counter);
-        $('#game').html(`
-        <h4>${question}</h4>
-        ${loadChoices(choices)}
-        ${loadRemainingQuestion()}
-    `);
-    }
-
-    function loadChoices(choices) {
-        let result = '';
-
-        for (let i = 0; i < choices.length; i++) {
-            result += `<p class="choice" data-answer="${choices[i]}">${choices[i]}</p>`;
-        }
-
-        return result;
-    }
-
-    
-    $(document).on('click', '.choice', function () {
-        clearInterval(timer);
-        const selectedAnswer = $(this).attr('data-answer');
-        const correctAnswer = quizQuestions[currentQuestion].correctAnswer;
-
-
-        if (correctAnswer === selectedAnswer) {
-            score++;
-            console.log('Winsss!!!!');
-            preloadImage();
-            setTimeout(nextQuestion, 3 * 1000);
-        } else {
-            lost++;
-            console.log('Lost!!!!');
-            preloadImage('lost');
-            setTimeout(nextQuestion, 3 * 1000);
-        }
+      if ($(this).attr("value") === "false") {
+        questionArea.fadeToggle("slow", displayWrong);
+        clearInterval(countDown);
+        wrong++;
+      }
     });
+  }
 
+  function displayCorrect() {
+    var cycle = setTimeout(displayQ, 5000);
+    var messageArea = $("<div>");
+    messageArea.addClass("message-content");
 
-    function displayResult() {
-        const result = `
-        <p>You get ${score} questions(s) right</p>
-        <p>You missed ${lost} questions(s)</p>
-        <p>Total questions ${quizQuestions.length} questions(s) right</p>
-        <button class="btn btn-primary" id="reset">Reset Game</button>
-    `;
+    var winMessage = $("<h2>");
+    var detail = $("<h2>");
+    var image = $("<img>");
 
-        $('#game').html(result);
+    messageArea.appendTo($("#content"));
+    winMessage.appendTo($(messageArea));
+    detail.appendTo($(messageArea));
+    image.appendTo($(messageArea));
+    winMessage.text("Correct!");
+    detail.text(questions[currentQuestion].detail);
+    image.attr("src", questions[currentQuestion].image);
+
+    if (currentQuestion === questions.length - 1) {
+      clearTimeout(cycle);
+      var gameEnd = setTimeout(gameOver, 10000);
+    }
+    currentQuestion++;
+  }
+
+  function displayWrong() {
+    var cycle = setTimeout(displayQ, 10000);
+    var messageArea = $("<div>");
+    messageArea.addClass("message-content");
+    var lossMessage = $("<h2>");
+    var detail = $("<h2>");
+    var image = $("<img>");
+
+    messageArea.appendTo($("#content"));
+    lossMessage.appendTo(messageArea);
+    detail.appendTo($(messageArea));
+    image.appendTo($(messageArea));
+    lossMessage.html(
+      "Wrong! The right answer was: " +
+        questions[currentQuestion].answers[questions[currentQuestion].values.indexOf(true)]
+    );
+    detail.text(questions[currentQuestion].detail);
+    image.attr("src", questions[currentQuestion].image);
+
+    if (currentQuestion === questions.length - 1) {
+      clearTimeout(cycle);
+      var gameEnd = setTimeout(gameOver, 10000);
+    }
+    currentQuestion++;
+  }
+
+  function timedOut() {
+    var cycle = setTimeout(displayQ, 10000);
+    var messageArea = $("<div>");
+    messageArea.addClass("message-content");
+    var lossMessage = $("<h2>");
+    var detail = $("<h2>");
+    var image = $("<img>");
+
+    messageArea.appendTo($("#content"));
+    lossMessage.appendTo(messageArea);
+    detail.appendTo($(messageArea));
+    image.appendTo($(messageArea));
+    lossMessage.html(
+      "You timed out! The right answer was: " +
+        questions[currentQuestion].answers[
+          questions[currentQuestion].values.indexOf(true)
+        ]
+    );
+    detail.text(questions[currentQuestion].detail);
+    image.attr("src", questions[currentQuestion].image);
+
+    if (currentQuestion === questions.length - 1) {
+      clearTimeout(cycle);
+      var gameEnd = setTimeout(gameOver, 10000);
+    }
+    currentQuestion++;
+  }
+
+  function gameOver() {
+    $(".message-content").remove();
+    var totalCorrect = $("<h3>");
+    var totalIncorrect = $("<h3>");
+    var totalNone = $("<h3>");
+    var restart = $("<button>");
+    totalCorrect.appendTo($("#content"));
+    totalCorrect.html("You got " + correct + " correct!");
+    totalIncorrect.appendTo("#content");
+    totalIncorrect.html("You got " + wrong + " wrong.");
+    totalNone.appendTo("#content");
+
+    if (none === 1) {
+      totalNone.html("You didn't answer " + none + " question.");
+    }
+    if (none > 1 || none === 0) {
+      totalNone.html("You didn't answer " + none + " questions.");
     }
 
+    restart.addClass("restart");
+    restart.text("Restart");
+    restart.appendTo($("#content"));
 
-    $(document).on('click', '#reset', function () {
-        counter = 30;
-        currentQuestion = 0;
-        score = 0;
-        lost = 0;
-        timer = null;
-
-        loadQuestion();
+    $(".restart").on("click", function() {
+      totalCorrect.remove();
+      totalIncorrect.remove();
+      totalNone.remove();
+      restart.remove();
+      currentQuestion = 0;
+      correct = 0;
+      wrong = 0;
+      none = 0;
+      displayQ();
     });
-
-
-    function loadRemainingQuestion() {
-        const remainingQuestion = quizQuestions.length - (currentQuestion + 1);
-        const totalQuestion = quizQuestions.length;
-
-        return `Remaining Question: ${remainingQuestion}/${totalQuestion}`;
-    }
-
-
-    function randomImage(images) {
-        const random = Math.floor(Math.random() * images.length);
-        const randomImage = images[random];
-        return randomImage;
-    }
-
-
-    
-    function preloadImage(status) {
-        const correctAnswer = quizQuestions[currentQuestion].correctAnswer;
-        const correctImage = quizQuestions[currentQuestion].image;
-
-        if (status === 'win') {
-            $('#game').html(`
-            <p class="preload-image">Congratulations, you pick the corrrect answer</p>
-            <p class="preload-image">The correct answer is <b>${correctAnswer}</b></p>
-            <img src="${image}" />
-        `);
-        } else {
-            $('#game').html(`
-            <p class="preload-image">The correct answer was <b>${correctAnswer}</b></p>
-            <p class="preload-image">You lost pretty bad</p>
-            <img src="${randomImage(lossImages)}" />
-        `);
-        }
-    }
-
-    $('#start').click(function () {
-        $('#start').remove();
-        $('#time').html(counter);
-        loadQuestion();
-    });
-
+  }
 });
